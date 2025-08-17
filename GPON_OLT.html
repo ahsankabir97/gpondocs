@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OLT Command Reference – CDATA / GPON 8-Port / VSOL & ATOP</title>
+  <style>
+    :root {
+      --bg: #eaf6ff;            /* light sky */
+      --panel: #ffffff;
+      --text: #0b1630;
+      --muted: #456a9a33;
+      --accent: #2f7de1;
+      --accent-2: #60a5fa;
+      --border: #b6d7ff;
+      --shadow: 0 8px 24px rgba(17, 40, 80, 0.08);
+    }
+    html.dark {
+      --bg: #0b1020;
+      --panel: #121937;
+      --text: #f3f5ff;
+      --muted: #a5b1ff33;
+      --accent: #6ea8fe;
+      --accent-2: #9fc5ff;
+      --border: #2d3769;
+      --shadow: 0 8px 28px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+
+    header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: blur(6px);
+      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+    }
+    .title { font-weight: 800; letter-spacing: .3px; font-size: clamp(18px, 2.6vw, 24px); color: var(--accent); }
+    .controls { display: flex; gap: 10px; align-items: center; }
+    .search {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); background: var(--panel);
+      border-radius: 12px; box-shadow: var(--shadow); width: min(780px, 65vw);
+    }
+    .search input { border: none; outline: none; background: transparent; color: var(--text); font-size: 15px; width: 100%; }
+
+    .toggle { border: 1px solid var(--border); background: var(--panel); color: var(--text); padding: 10px 12px; border-radius: 12px; cursor: pointer; box-shadow: var(--shadow); font-weight: 600; }
+
+    main { padding: 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; }
+
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+    .card-head { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .card-title { font-weight: 700; color: var(--accent); }
+
+    .tabs { display: inline-flex; background: color-mix(in oklab, var(--panel) 70%, var(--muted)); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .tab-btn { appearance: none; background: transparent; color: var(--text); border: none; padding: 8px 12px; cursor: pointer; font-weight: 600; opacity: .7; }
+    .tab-btn.active { background: var(--accent); color: white; opacity: 1; }
+
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th { position: sticky; top: 0; background: color-mix(in oklab, var(--panel) 80%, var(--muted)); color: var(--accent-2); text-align: left; font-weight: 800; font-size: 13px; border-bottom: 1px solid var(--border); padding: 10px; }
+    tbody td { border-bottom: 1px dashed var(--border); padding: 10px; vertical-align: top; font-size: 14px; }
+    tbody tr:hover { background: color-mix(in oklab, var(--panel) 85%, var(--muted)); }
+    code { background: color-mix(in oklab, var(--panel) 82%, var(--muted)); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); display: inline-block; }
+
+    .empty { padding: 10px 16px; opacity: .7; font-style: italic; }
+    footer { text-align: center; padding: 20px; opacity: .7; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">OLT Command Reference — CDATA / GPON 8‑Port / VSOL & ATOP</div>
+    <div class="controls">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="search" placeholder="Search commands or actions… (filters all tabs & vendors)" />
+      </div>
+      <button id="modeToggle" class="toggle" title="Toggle Dark/Light">🌙 Dark</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- CDATA GPON OLT -->
+    <section class="card" data-vendor="CDATA GPON OLT">
+      <div class="card-head">
+        <div class="card-title">CDATA_GPON OLT</div>
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-target="cdata-troubleshoot" role="tab">Troubleshoot</button>
+          <button class="tab-btn" data-target="cdata-install" role="tab">Installation</button>
+        </div>
+      </div>
+      <div class="pane active" id="cdata-troubleshoot">
+        <table>
+          <thead><tr><th>Action</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>ONU Discover check</td><td><code>(config-interface-gpon-0/0)# show ont autofind all</code><br><code>(config-interface-gpon-0/0)# show ont autofind 1 all</code></td></tr>
+            <tr><td>ONU configuration Check</td><td><code>(config-interface-gpon-0/0)# show ont info 1 1</code><br><code>(config)# show current-config section ont 0/0 2 5</code></td></tr>
+            <tr><td>ONU Laser check</td><td><code>(config-interface-gpon-0/0)# show ont optical-info 1 1</code></td></tr>
+            <tr><td>ONU Delete</td><td><code>(config-interface-gpon-0/0)# ont delete 1 28</code></td></tr>
+            <tr><td>ONU Client MAC check</td><td><code>(config-interface-gpon-0/0)# show ont port  learned-mac 1 1 eth 4</code></td></tr>
+            <tr><td>ONU Reboot</td><td><code>(config-interface-gpon-0/0)# ont reboot 1 3</code></td></tr>
+            <tr><td>Line Profile check</td><td><code>(config)# show ont-lineprofile gpon profile-id 5</code></td></tr>
+            <tr><td>MAC from ONU port</td><td><code>(config-interface-gpon-0/0)# show ont port learned-mac 1 35 eth 1</code><br><code>(config-interface-gpon-0/0)# show ont port learned-mac 9 9 eth 2</code></td></tr>
+            <tr><td>Show all ONU at OLT</td><td><code>(config-interface-gpon-0/0)# show ont info all</code></td></tr>
+            <tr><td>Rate-Limit UP/Down</td><td><code>(config-interface-gpon-0/0)# ont port car 2 14 eth 3 inbound 60 outbound 60</code><br><code>(config-interface-gpon-0/0)# no ont port car 1 2 eth 1 inbound outbound</code></td></tr>
+            <tr><td>ONU Port VLAN/ Status Check</td><td><code>(config-interface-gpon-0/0)# show ont port attribute 15 13 eth all</code><br><code>(config-interface-gpon-0/0)# show ont port state 15 13 eth all</code><br><code>(config-interface-gpon-0/0)# show ont wan config 15 9</code></td></tr>
+            <tr><td>ONU Port BW check</td><td><code>(config-interface-gpon-0/0)# show ont port car 1 1 eth all</code></td></tr>
+            <tr><td>ONU LAN port on/off</td><td><code>(config-interface-gpon-0/0)# ont port attribute 1 1 eth 1 operational-state on</code><br><code>(config-interface-gpon-0/0)# ont port attribute 1 1 eth 1 operational-state off</code></td></tr>
+            <tr><td>All MAC (switch)</td><td><code>(config)# show mac-address dynamic</code></td></tr>
+            <tr><td>Check ONU service-port</td><td><code>(config)# show service-port gpon 0/0 port 1 ont 1</code></td></tr>
+            <tr><td>Mac Static</td><td><code>(config)# mac-address static port xge 0/0/1 vlan 295 B8:D6:F6:11:46:36</code></td></tr>
+            <tr><td>PON Up/Down Check</td><td><code>(config-interface-gpon-0/0)# show ont info all</code><br><code>(config-interface-gpon-0/0)# show ont info 15  all</code></td></tr>
+            <tr><td>PON Laser check</td><td><code>(config-interface-gpon-0/0)# show ont optical-info 1 all</code></td></tr>
+            <tr><td>PON TX power / Temp</td><td><code>(config-interface-gpon-0/0)# show port ddm-info 2</code><br><code>(config-interface-gpon-0/0)# show temperature</code></td></tr>
+            <tr><td>Uplink Port status</td><td><code>(config-interface-xge-0/0)# show port state all</code></td></tr>
+            <tr><td>Uplink traffic</td><td><code>(config-interface-xge-0/0)# show statistics port 1</code></td></tr>
+            <tr><td>PON Shut/No‑Shut</td><td><code>(config-interface-gpon-0/0)# shutdown 3</code><br><code>(config-interface-gpon-0/0)# no shutdown 3</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pane" id="cdata-install">
+        <table>
+          <thead><tr><th>Action</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>VLAN Check</td><td><code>(config)# show vlan all</code><br><code>(config)# show vlan 100</code></td></tr>
+            <tr><td>VLAN Create</td><td><code>(config)# vlan 191</code></td></tr>
+            <tr><td>Uplink VLAN Tag (1G)</td><td><code>interface ge 0/0</code><br><code>vlan trunk 1 123</code></td></tr>
+            <tr><td>Uplink VLAN Tag (10G)</td><td><code>interface xge 0/0</code><br><code>vlan trunk 1 123</code></td></tr>
+            <tr><td>Line Profile Create</td><td><code>ont-lineprofile gpon profile-id 489</code><br><code>tcont 1 dba-profile-id 30</code><br><code>gem add 1 tcont 1</code><br><code>gem mapping 1 1 vlan 489</code><br><code>mapping-mode vlan</code><br><code>commit</code></td></tr>
+            <tr><td>Line Profile (add VLAN)</td><td><code>ont-lineprofile gpon profile-id 76</code><br><code>tcont 1 dba-profile-id 30</code><br><code>gem add 1 tcont 1</code><br><code>gem mapping 1 2 vlan 76</code><br><code>mapping-mode vlan</code><br><code>commit</code></td></tr>
+            <tr><td>Enter VLAN to ONU 2nd port</td><td><code>interface gpon 0/0</code><br><code>ont port attribute 9 9 eth 2 operational-state on</code><br><code>ont port native-vlan 9 9 eth 2 vlan 1260 priority 0</code><br><code>save</code><br><code>service-port autoindex vlan 1260 gpon 0/0 port 9 ont 9 gemport 1 multi-service user-vlan 1260 tag-action transparent</code></td></tr>
+            <tr><td>ONU add (multi‑VLAN)</td><td><code>ont add 5 29 sn-auth VSOL0061CF40 ont-lineprofile-id 503 ont-srvprofile-id 1</code><br><code>ont port native-vlan 5 29 eth 1 vlan 646</code><br><code>ont port attribute 5 29 eth 2 operational-state on</code><br><code>ont port native-vlan 5 29 eth 2 vlan 588</code><br><code>ont port attribute 5 29 eth 3 operational-state on</code><br><code>ont port native-vlan 5 29 eth 3 vlan 588</code><br><code>ont port attribute 5 29 eth 4 operational-state off</code><br><code>ont port car 5 29 eth 1 inbound 100 outbound 100</code><br><code>ont port car 5 29 eth 2 inbound 100 outbound 100</code><br><code>ont port car 5 29 eth 3 inbound 100 outbound 100</code><br><code>service-port autoindex vlan 646 gpon 0/0 port 5 ont 29 gemport 1 multi-service user-vlan 646 tag-action transparent</code><br><code>service-port autoindex vlan 588 gpon 0/0 port 5 ont 29 gemport 1 multi-service user-vlan 588 tag-action transparent</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- GPON 8 Port OLT -->
+    <section class="card" data-vendor="GPON 8 Port OLT">
+      <div class="card-head">
+        <div class="card-title">GPON 8 Port OLT</div>
+        <div class="tabs">
+          <button class="tab-btn active" data-target="g8-troubleshoot">Troubleshoot</button>
+          <button class="tab-btn" data-target="g8-install">Installation</button>
+        </div>
+      </div>
+      <div class="pane active" id="g8-troubleshoot">
+        <table>
+          <thead><tr><th>Action</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>ONU Discover</td><td><code>(config-interface-gpon)# show ont autofind all</code></td></tr>
+            <tr><td>ALL ONU Details</td><td><code>(config)# show saved-config</code></td></tr>
+            <tr><td>Specific ONU Details</td><td><code>(config-interface-gpon)# show ont info 2 2</code></td></tr>
+            <tr><td>ONU Port Check</td><td><code>(config-interface-gpon)# show ont port attribute 2 2 eth all</code></td></tr>
+            <tr><td>ONU Port Details</td><td><code>(config-interface-gpon)# show ont port car 2 2 eth all</code></td></tr>
+            <tr><td>MAC from ONU port</td><td><code>(config)# show mac-address vlan 999</code><br><code>(config-interface-gpon)# show ont port learned-mac 2 9 eth 2</code></td></tr>
+            <tr><td>ONU Port BW</td><td><code>(config-interface-gpon)# ont port car 2 2 eth 1 inbound 100 outbound 100</code><br><code>(config-interface-gpon)# ont port car 2 2 eth 2 inbound 100 outbound 100</code></td></tr>
+            <tr><td>ONU Delete</td><td><code>(config-interface-gpon)# ont delete 2 2</code></td></tr>
+            <tr><td>Show all ONU of specific PON</td><td><code>Dilkusha_GPON-01(config)# show ont info 2 all</code></td></tr>
+            <tr><td>Show Line Profile</td><td><code>(config)# show ont-lineprofile profile-id 512</code></td></tr>
+            <tr><td>PON Shut / No‑Shut</td><td><code>(config-interface-gpon)# shutdown 2</code></td></tr>
+            <tr><td></td><td><code>(config-interface-gpon)# show ont port attribute 6 6 eth all</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pane" id="g8-install">
+        <table>
+          <thead><tr><th>Action</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>VLAN Add</td><td><code>(config)# vlan 748</code></td></tr>
+            <tr><td>Uplink VLAN Tag (GE)</td><td><code>interface ge</code><br><code>vlan trunk 1 748</code></td></tr>
+            <tr><td>Uplink VLAN Tag (XGE)</td><td><code>interface xge</code><br><code>vlan trunk 1 748</code></td></tr>
+            <tr><td>PON side trunk</td><td><code>(config-interface-gpon)# vlan mode 1-8 trunk</code><br><code>(config-interface-gpon)# vlan trunk 1-8 748</code></td></tr>
+            <tr><td>Line Profile create</td><td><code>ont-lineprofile  profile-id 191</code><br><code>tcont 1 dba-profile-id 30</code><br><code>gem add 1 tcont 1</code><br><code>gem mapping 1 1 vlan 191</code><br><code>mapping-mode vlan</code><br><code>commit</code></td></tr>
+            <tr><td>Multiple VLAN ONU ADD</td><td><code>ont add 2 2 sn-auth E067B3C84748 ont-lineprofile-id 511 ont-srvprofile-id 1</code><br><code>ont port native-vlan 2 2 eth 1 vlan 893</code><br><code>ont port attribute 2 2 eth 2 operational-state on</code><br><code>ont port native-vlan 2 2 eth 2 vlan 455</code><br><code>ont port attribute 2 2 eth 3 operational-state on</code><br><code>ont port native-vlan 2 2 eth 3 vlan 187</code><br><code>ont port attribute 2 2 eth 4 operational-state off</code><br><code>ont port car 2 2 eth 1 inbound 100 outbound 100</code><br><code>ont port car 2 2 eth 2 inbound 100 outbound 100</code><br><code>ont port car 2 2 eth 3 inbound 100 outbound 100</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VSOL & ATOP OLT -->
+    <section class="card" data-vendor="VSOL & ATOP OLT">
+      <div class="card-head">
+        <div class="card-title">VSOL & ATOP OLT</div>
+        <div class="tabs">
+          <button class="tab-btn active" data-target="vsol-troubleshoot">Troubleshoot</button>
+          <button class="tab-btn" data-target="vsol-install">Installation</button>
+        </div>
+      </div>
+      <div class="pane active" id="vsol-troubleshoot">
+        <table>
+          <thead><tr><th>Action</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>ONU Discover Check</td><td><code>(config-pon-0/1)# show onu auto-find</code></td></tr>
+            <tr><td>ONU Config Check</td><td><code>(config-pon-0/1)# show running-config onu 10</code></td></tr>
+            <tr><td>Free ONU ID check</td><td><code>(config-pon-0/1)# show onu state</code></td></tr>
+            <tr><td>ONU Reboot</td><td><code>(config-pon-0/2)# onu 26 reboot</code></td></tr>
+            <tr><td>ONU Port learnt mac</td><td><code>(config)# show mac address-table pon 1 2</code></td></tr>
+            <tr><td>ONU Laser check</td><td><code>(config-pon-0/1)# show onu 2 optical_info</code></td></tr>
+            <tr><td>Profile Line check</td><td><code>(config)# show profile line id 5</code></td></tr>
+            <tr><td>ONU Eth port status check</td><td><code>(config-pon-0/3)# show onu 24 eth 1</code></td></tr>
+            <tr><td>All ONU Laser check</td><td><code>(config-pon-0/3)# show pon onu all rx-power</code></td></tr>
+            <tr><td>Rate-limit Omit</td><td><code>(config-pon-0/3)# no ont port car 15 19 eth 1 inbound</code><br><code>(config-pon-0/3)# no ont port car 15 19 eth 1 outbound</code></td></tr>
+            <tr><td>ONU Disable / Enable</td><td><code>(config-pon-0/2)# onu 26 enable</code><br><code>(config-pon-0/2)# onu 26 disable</code></td></tr>
+            <tr><td>ONU Lock / Unlock</td><td><code>(config-pon-0/2)# onu 26 deactivate</code><br><code>(config-pon-0/2)# onu 26 activate</code></td></tr>
+            <tr><td>ONU Port Lock / Unlock</td><td><code>(config-pon-0/2)# onu 26 eth 1 state disable</code><br><code>(config-pon-0/2)# onu 26 eth 1 state enable</code></td></tr>
+            <tr><td>PON Shut / No‑Shut</td><td><code>Bashundhara_VSOL_GPON-05(config-pon-0/1)# shutdown</code><br><code>Bashundhara_VSOL_GPON-05(config-pon-0/1)# no shutdown</code></td></tr>
+            <tr><td>PON TX Power / Temperature</td><td><code>(config-pon-0/1)# show pon optical transceiver</code></td></tr>
+            <tr><td>PON / Uplink port traffic</td><td><code>(config-if-ge0/5)# show interface</code></td></tr>
+            <tr><td>ONU Distance from OLT</td><td><code>(config-pon-0/3)# show onu 25 distance</code></td></tr>
+            <tr><td>Multiple VLAN tagged ONU change</td><td><code>onu add 1 profile 4_port_onu sn VSOL0061d078</code><br><code>onu 1 profile line id 10</code><br><code>onu 1 portvlan eth 1 mode tag vlan 136 pri 0</code><br><code>onu 1 eth 2 state enable</code><br><code>onu 1 portvlan eth 2 mode tag vlan 139 pri 0</code><br><code>onu 1 eth 3 state enable</code><br><code>onu 1 portvlan eth 3 mode tag vlan 695 pri 0</code><br><code>onu 1 eth 4 state enable</code><br><code>onu 1 portvlan eth 4 mode tag vlan 136 pri 0</code><br><code>onu 1 eth 1/2/3/4 loopdetect disable</code><br><code>up/down rate limits as needed…</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pane" id="vsol-install">
+        <table>
+          <thead><tr><th>Action</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>Show VLAN</td><td><code>(config)# show vlan 500</code></td></tr>
+            <tr><td>VLAN Create</td><td><code>(config)# vlan 500</code></td></tr>
+            <tr><td>All interface check</td><td><code>(config)# show interface brief</code></td></tr>
+            <tr><td>VLAN Add in Uplink port</td><td><code>(config)# interface gigabitethernet 0/5</code><br><code>(config-if-ge0/5)# switchport mode trunk</code><br><code>(config-if-ge0/5)# switchport trunk vlan 500</code><br><code>(config-if-ge0/5)# exit</code></td></tr>
+            <tr><td>DBA Profile Check</td><td><code>(config)# show profile dba</code></td></tr>
+            <tr><td>DBA Profile Create</td><td><code>profile dba id 1 name MAX_BW</code><br><code>type 4 maximum 307200 Kbps</code><br><code>commit</code></td></tr>
+            <tr><td>Line‑Profile Create</td><td><code>(config)# profile line id 782</code><br><code>tcont 1 dba MAX_BW</code><br><code>gemport 1 tcont 1</code><br><code>service 1 gemport 1 vlan 782</code><br><code>service-port 1 gemport 1 uservlan 782 vlan 782</code><br><code>commit</code></td></tr>
+            <tr><td>Line‑Profile (multiple VLAN)</td><td><code>(config)# profile line id 14</code><br><code>tcont 1 dba MAX_BW</code><br><code>gemport 1 tcont 1</code><br><code>service 1 gemport 1 vlan 14,620</code><br><code>service-port 1 gemport 1 uservlan 14 vlan 14</code><br><code>service-port 2 gemport 1 uservlan 620 vlan 620</code><br><code>commit</code></td></tr>
+            <tr><td>Mac Static</td><td><code>(config)# mac address-table static vlan 71 80db:1702:496d interface gigabitethernet 0/5</code><br><code>(config)# mac address-table static vlan 59 0002-17dc-d81b interface gigabitethernet 0/6</code></td></tr>
+            <tr><td>Save</td><td><code># write</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>Tip: Use the search box to filter across all vendors, tabs, and commands instantly.</footer>
+
+  <script>
+    // Dark mode toggle with localStorage
+    const html = document.documentElement;
+    const modeBtn = document.getElementById('modeToggle');
+    const saved = localStorage.getItem('olt-mode');
+    if (saved === 'dark') html.classList.add('dark');
+    modeBtn.textContent = html.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
+    modeBtn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      const dark = html.classList.contains('dark');
+      localStorage.setItem('olt-mode', dark ? 'dark' : 'light');
+      modeBtn.textContent = dark ? '☀️ Light' : '🌙 Dark';
+    });
+
+    // Tabs per card
+    document.querySelectorAll('.card').forEach(card => {
+      card.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          card.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+          card.querySelector('#' + btn.dataset.target).classList.add('active');
+        });
+      });
+    });
+
+    // Global search filter (matches text in all tables)
+    const search = document.getElementById('search');
+    const rows = Array.from(document.querySelectorAll('tbody tr'));
+    const vendors = Array.from(document.querySelectorAll('section.card'));
+    const noMatchMap = new Map();
+
+    function filterRows(q) {
+      const term = q.trim().toLowerCase();
+      let visibleCount = 0;
+      rows.forEach(tr => {
+        const text = tr.innerText.toLowerCase();
+        const show = !term || text.includes(term);
+        tr.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+      // show an empty message if a vendor section has no visible rows
+      vendors.forEach(card => {
+        const hasVisible = Array.from(card.querySelectorAll('tbody tr')).some(tr => tr.style.display !== 'none');
+        let empty = noMatchMap.get(card);
+        if (!hasVisible) {
+          if (!empty) {
+            empty = document.createElement('div');
+            empty.className = 'empty';
+            empty.textContent = 'No matches in this section.';
+            card.appendChild(empty);
+            noMatchMap.set(card, empty);
+          }
+        } else if (empty) {
+          empty.remove();
+          noMatchMap.delete(card);
+        }
+      });
+      return visibleCount;
+    }
+    search.addEventListener('input', (e) => filterRows(e.target.value));
+  </script>
+</body>
+</html>
