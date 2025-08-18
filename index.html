@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Profile Create</title>
+    <!-- Google Fonts: Poppins for general text, Montserrat for headings, Roboto Mono for code/output -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            --bg-light: #e0f2f7; /* Light cyan background */
+            --bg-dark: #1a202c; /* Dark charcoal background */
+            --card-light: #ffffff; /* White card background */
+            --card-dark: #2d3748; /* Darker charcoal card */
+            --text-light: #2d3748; /* Dark grey text */
+            --text-dark: #e2e8f0; /* Light grey text */
+            --primary-color: #38b2ac; /* Teal */
+            --secondary-color: #4299e1; /* Blue */
+            --accent-color: #f6ad55; /* Orange */
+            --border-light: #cbd5e0; /* Light grey border */
+            --border-dark: #4a5568; /* Dark grey border */
+            --code-bg-light: #edf2f7; /* Off-white for code */
+            --code-bg-dark: #1a202c; /* Same as dark background for code */
+            --button-success: #48bb78; /* Green */
+            --button-danger: #f56565; /* Red */
+            --button-info: #4299e1; /* Blue for copy */
+            --shadow-light: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Dark mode styles */
+        body.dark {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        /* Header styles */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8em;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Container for cards */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--card-light);
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: var(--shadow-light);
+            transition: background-color 0.4s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        body.dark .card {
+            background-color: var(--card-dark);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sub-headings within cards */
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.dark h2 {
+            color: var(--secondary-color);
+            border-bottom-color: var(--border-dark);
+        }
+
+        /* Form group styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+            color: var(--text-light);
+        }
+
+        body.dark label {
+            color: var(--text-dark);
+        }
+
+        /* Input and select styles */
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        body.dark select, body.dark input[type="text"] {
+            border-color: var(--border-dark);
+            background-color: var(--card-dark);
+            color: var(--text-dark);
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.25);
+        }
+
+        body.dark select:focus, body.dark input:focus, body.dark textarea:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.25);
+        }
+
+        /* VLAN grid for responsive layout */
+        .vlan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        /* Textarea for output */
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            background-color: var(--code-bg-light);
+            color: var(--text-light);
+            resize: vertical;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            box-sizing: border-box;
+            flex-grow: 1; /* Allows textarea to take available space */
+        }
+
+        body.dark textarea {
+            background-color: var(--code-bg-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        /* Button group */
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: auto; /* Pushes buttons to the bottom of the card */
+            padding-top: 10px;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-generate {
+            background-color: var(--button-success);
+            color: white;
+        }
+        .btn-generate:hover { background-color: #31a364; }
+
+        .btn-clear {
+            background-color: var(--button-danger);
+            color: white;
+        }
+        .btn-clear:hover { background-color: #d84b4b; }
+        
+        .btn-copy {
+            background-color: var(--button-info);
+            color: white;
+        }
+        .btn-copy:hover { background-color: #3182ce; }
+
+        /* Dark mode toggle switch */
+        .dark-mode-toggle {
+            position: fixed; /* Use fixed for consistent positioning */
+            top: 25px;
+            right: 25px;
+            width: 60px; /* Wider for better visual */
+            height: 30px;
+            background-color: var(--border-light);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.4s ease-in-out;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        body.dark .dark-mode-toggle {
+            background-color: var(--border-dark);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .dark-mode-toggle::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background-color: var(--card-light);
+            border-radius: 50%;
+            transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        body.dark .dark-mode-toggle::before {
+            transform: translateX(30px);
+            background-color: var(--card-dark);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Dark Mode Toggle Switch -->
+    <div class="dark-mode-toggle" onclick="document.body.classList.toggle('dark')"></div>
+
+    <h1>Line Profile Create</h1>
+
+    <div class="container">
+        <!-- Input Section -->
+        <div class="card">
+            <h2><span role="img" aria-label="settings">⚙️</span> Inputs</h2>
+            <div class="form-group">
+                <label for="oltName">OLT Name</label>
+                <select id="oltName">
+                    <option value="cdata16">CDATA GPON 16-PON</option>
+                    <option value="cdata8">CDATA GPON 8-PON</option>
+                    <option value="vsol">VSOL</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="profileId">Profile Line ID</label>
+                <input type="text" id="profileId" placeholder="e.g., 10">
+            </div>
+
+            <div class="form-group">
+                <label>VLAN IDs</label>
+                <div class="vlan-grid">
+                    <input type="text" id="vlan1" placeholder="VLAN 1">
+                    <input type="text" id="vlan2" placeholder="VLAN 2">
+                    <input type="text" id="vlan3" placeholder="VLAN 3">
+                    <input type="text" id="vlan4" placeholder="VLAN 4">
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-generate" onclick="generateScript()">Generate</button>
+                <button class="btn btn-clear" onclick="clearFields()">Clear</button>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="card">
+            <h2><span role="img" aria-label="script">📜</span> Generated Script</h2>
+            <textarea id="output" readonly placeholder="Your generated script will appear here..."></textarea>
+            <div class="buttons">
+                <button class="btn btn-copy" onclick="copyScript()">Copy</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function generateScript() {
+        const olt = document.getElementById("oltName").value;
+        const profileId = document.getElementById("profileId").value.trim() || "10";
+        // Filter out empty VLAN values and trim whitespace
+        const vlans = [
+            document.getElementById("vlan1").value.trim(),
+            document.getElementById("vlan2").value.trim(),
+            document.getElementById("vlan3").value.trim(),
+            document.getElementById("vlan4").value.trim()
+        ].filter(v => v !== '');
+
+        let script = "";
+
+        if (olt === "vsol") {
+            const vlanString = vlans.join(",");
+            let servicePorts = '';
+            vlans.forEach((v, i) => {
+                servicePorts += `service-port ${i + 1} gemport 1 uservlan ${v} vlan ${v}\n`;
+            });
+            script = `profile line id ${profileId}\ntcont 1 name tcont_1 dba MAX_BW\ngemport 1 tcont 1\nservice 1 gemport 1 vlan ${vlanString}\n${servicePorts}commit\nexit`;
+        } else if (olt === "cdata16") {
+            let gemMappings = '';
+            vlans.forEach((v, i) => {
+                gemMappings += `gem mapping 1 ${i + 1} vlan ${v}\n`;
+            });
+            script = `ont-lineprofile gpon profile-id ${profileId}\ntcont 1 dba-profile-id 30\ngem add 1 tcont 1\n${gemMappings}mapping-mode vlan\ncommit\nexit`;
+        } else if (olt === "cdata8") {
+            let gemMappings = '';
+            vlans.forEach((v, i) => {
+                gemMappings += `gem mapping 1 ${i + 1} vlan ${v}\n`;
+            });
+            script = `ont-lineprofile profile-id ${profileId}\ntcont 1 dba-profile-id 30\ngem add 1 tcont 1\n${gemMappings}mapping-mode vlan\ncommit\nexit`;
+        }
+
+        document.getElementById("output").value = script;
+    }
+
+    function clearFields() {
+        document.getElementById("profileId").value = "";
+        document.getElementById("vlan1").value = "";
+        document.getElementById("vlan2").value = "";
+        document.getElementById("vlan3").value = "";
+        document.getElementById("vlan4").value = "";
+        document.getElementById("output").value = "";
+    }
+
+    function copyScript() {
+        const output = document.getElementById("output");
+        output.select();
+        output.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand("copy"); // Deprecated but widely supported in iframes
+        // Using alert for simplicity, consider a custom modal in a real app
+        alert("Script copied to clipboard!");
+    }
+</script>
+</body>
+</html>
